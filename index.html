@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BIOM Portal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="center card" id="landing">
+    <h1>Welcome to <span class="accent">BIOM</span></h1>
+    <p>Yahan teachers aur students ke liye study PDFs share honge.</p>
+    <button id="enterBtn">Click Here</button>
+  </div>
+
+  <!-- Login page -->
+  <div class="container" id="loginPage" style="display:none;">
+    <div class="card">
+      <h2>Login</h2>
+      <div class="tabs">
+        <button class="tabbtn active" data-type="teacher">Teacher Login</button>
+        <button class="tabbtn" data-type="student">Student Login</button>
+      </div>
+
+      <!-- Teacher form -->
+      <div id="teacherForm" class="form">
+        <label>Username</label>
+        <input id="teacherUser" placeholder="Enter username" />
+        <label>Password</label>
+        <input id="teacherPass" type="password" placeholder="Enter password" />
+        <button id="teacherLoginBtn">Login as Teacher</button>
+      </div>
+
+      <!-- Student form -->
+      <div id="studentForm" class="form" style="display:none;">
+        <label>Email or Phone</label>
+        <input id="studentContact" placeholder="example@mail.com or 91XXXXXXXXXX" />
+        <button id="sendOtpBtn">Send OTP</button>
+
+        <div id="otpSection" style="display:none;">
+          <label>Enter OTP (Demo will show OTP)</label>
+          <input id="otpInput" placeholder="Enter OTP" />
+          <button id="verifyOtpBtn">Verify & Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main dashboard -->
+  <div class="container" id="dashboard" style="display:none;">
+    <div class="topbar">
+      <h2 id="welcomeText">Welcome</h2>
+      <div>
+        <span id="studentCountDisplay" style="display:none;">Students joined: <strong id="studentCount">0</strong></span>
+        <button id="logoutBtn">Logout</button>
+        <button id="viewStudentsBtn" style="display:none; margin-right:10px;">View Students</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Subjects</h3>
+      <div class="subjects" id="subjectsList">
+        <!-- subject buttons injected by JS -->
+      </div>
+    </div>
+
+    <div class="card" id="subjectArea" style="display:none;">
+      <h3 id="subjectTitle"></h3>
+
+      <!-- Upload area visible only to teacher -->
+      <div id="uploadArea" style="display:none;">
+        <label>Upload PDF for this subject:</label>
+        <input type="file" id="pdfFileInput" accept="application/pdf" />
+        <button id="uploadPdfBtn">Upload PDF</button>
+      </div>
+
+      <div id="pdfList">
+        <h4>Available PDFs</h4>
+        <ul id="pdfItems"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Students Modal (hidden by default) -->
+<div id="studentsModal" style="display:none;">
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Joined Students</h3>
+      <button id="closeModalBtn">Close</button>
+    </div>
+    <div class="modal-body">
+      <p>Total Students: <strong id="modalStudentCount">0</strong></p>
+      <table id="studentsTable">
+        <thead>
+          <tr><th>#</th><th>Contact (Email/Phone)</th><th>Joined On</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button id="downloadCsvBtn">Download CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- Yeh tumhara purana script hai -->
+<script src="script.js"></script>
+</body>
+</html>
