@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BIOM Portal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="center card" id="landing">
+    <h1>Welcome to <span class="accent">BIOM</span></h1>
+    <p>Yahan teachers aur students ke liye study PDFs share honge.</p>
+    <button id="enterBtn">Click Here</button>
+  </div>
+
+  <!-- Login page -->
+  <div class="container" id="loginPage" style="display:none;">
+    <div class="card">
+      <h2>Login</h2>
+      <div class="tabs">
+        <button class="tabbtn active" data-type="teacher">Teacher Login</button>
+        <button class="tabbtn" data-type="student">Student Login</button>
+      </div>
+
+      <!-- Teacher form -->
+      <div id="teacherForm" class="form">
+        <label>Username</label>
+        <input id="teacherUser" placeholder="Enter username" />
+        <label>Password</label>
+        <input id="teacherPass" type="password" placeholder="Enter password" />
+        <button id="teacherLoginBtn">Login as Teacher</button>
+      </div>
+
+      <!-- Student form -->
+      <div id="studentForm" class="form" style="display:none;">
+        <label>Email or Phone</label>
+        <input id="studentContact" placeholder="example@mail.com or 91XXXXXXXXXX" />
+        <button id="sendOtpBtn">Send OTP</button>
+
+        <div id="otpSection" style="display:none;">
+          <label>Enter OTP (Demo will show OTP)</label>
+          <input id="otpInput" placeholder="Enter OTP" />
+          <button id="verifyOtpBtn">Verify & Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main dashboard -->
+  <div class="container" id="dashboard" style="display:none;">
+    <div class="topbar">
+      <h2 id="welcomeText">Welcome</h2>
+      <div>
+        <span id="studentCountDisplay" style="display:none;">Students joined: <strong id="studentCount">0</strong></span>
+        <button id="logoutBtn">Logout</button>
+        <button id="viewStudentsBtn" style="display:none; margin-right:10px;">View Students</button>
+      </div>
+    </div>
+    
+    <!-- Teacher Upload Section -->
+<div class="card" id="teacherUploadPanel" style="display:none; text-align:center;">
+  <h2>Teacher Upload Panel</h2>
+
+  <label for="subjectSelect" style="color:white;">Select Subject:</label>
+  <select id="subjectSelect">
+    <option value="biology">Biology</option>
+    <option value="chemistry">Chemistry</option>
+    <option value="english">English</option>
+    <option value="hindi">Hindi</option>
+    <option value="physics">Physics</option>
+  </select>
+  <br><br>
+
+  <input type="file" id="fileInput" accept="application/pdf">
+  <button onclick="uploadToDrive()">Upload to Drive</button>
+  <p id="uploadStatus" style="color:white;"></p>
+</div>
+
+    <div class="card">
+  <h3>Subjects and Notes</h3>
+
+  <div style="text-align:center; color:white; margin-top:30px;">
+    <h2>📘 Biology Notes</h2>
+    <iframe 
+      src="https://drive.google.com/embeddedfolderview?id=1Gq5yGxRoyLGVBG_5v9vD53L9_jDv33g8#list" 
+      style="width:95%; height:600px; border:0; background-color:rgba(255,255,255,0.05); border-radius:10px;">
+    </iframe>
+
+    <h2>🧪 Chemistry Notes</h2>
+    <iframe 
+      src="https://drive.google.com/embeddedfolderview?id=1Z7PZtQpoqn2tjXL_48QIfNvJmKfOIbUR#list" 
+      style="width:95%; height:600px; border:0; background-color:rgba(255,255,255,0.05); border-radius:10px;">
+    </iframe>
+
+    <h2>📖 English Notes</h2>
+    <iframe 
+      src="https://drive.google.com/embeddedfolderview?id=1aLPwF0IOgRIuhc2rS83tZUhTBz9hV2JP#list" 
+      style="width:95%; height:600px; border:0; background-color:rgba(255,255,255,0.05); border-radius:10px;">
+    </iframe>
+
+    <h2>📝 Hindi Notes</h2>
+    <iframe 
+      src="https://drive.google.com/embeddedfolderview?id=1O7u0O_A7_0fyuynBr6FKOmLCVENXIxOY#list" 
+      style="width:95%; height:600px; border:0; background-color:rgba(255,255,255,0.05); border-radius:10px;">
+    </iframe>
+
+    <h2>⚛️ Physics Notes</h2>
+    <iframe 
+      src="https://drive.google.com/embeddedfolderview?id=1GNEOANPA04pnp5TebD58kSWkVC_9sjDD#list" 
+      style="width:95%; height:600px; border:0; background-color:rgba(255,255,255,0.05); border-radius:10px;">
+    </iframe>
+  </div>
+</div>
+
+    <div class="card" id="subjectArea" style="display:none;">
+      <h3 id="subjectTitle"></h3>
+
+      <!-- Upload area visible only to teacher -->
+      <div id="uploadArea" style="display:none;">
+        <label>Upload PDF for this subject:</label>
+        <input type="file" id="pdfFileInput" accept="application/pdf" />
+        <button id="uploadPdfBtn">Upload PDF</button>
+      </div>
+
+      <div id="pdfList">
+        <h4>Available PDFs</h4>
+        <ul id="pdfItems"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Students Modal (hidden by default) -->
+<div id="studentsModal" style="display:none;">
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Joined Students</h3>
+      <button id="closeModalBtn">Close</button>
+    </div>
+    <div class="modal-body">
+      <p>Total Students: <strong id="modalStudentCount">0</strong></p>
+      <table id="studentsTable">
+        <thead>
+          <tr><th>#</th><th>Contact (Email/Phone)</th><th>Joined On</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button id="downloadCsvBtn">Download CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- Yeh tumhara purana script hai -->
+<script src="script.js"></script>
+
+<!-- Google Drive Upload Script -->
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+const CLIENT_ID = "382674775721-avuo2bmlndksjvi59n2lmfp91j683508.apps.googleusercontent.com";
+const API_KEY = "AIzaSyCcvJoFB3yQjpmKyGX3o2CqlvNTQJI4_ew";
+// Folder IDs for each subject
+const FOLDER_IDS = {
+  biology: "1Gq5yGxRoyLGVBG_5v9vD53L9_jDv33g8",
+  chemistry: "1Z7PZtQpoqn2tjXL_48QIfNvJmKfOIbUR",
+  english: "1aLPwF0IOgRIuhc2rS83tZUhTBz9hV2JP",
+  hindi: "1O7u0O_A7_0fyuynBr6FKOmLCVENXIxOY",
+  physics: "1GNEOANPA04pnp5TebD58kSWkVC_9sjDD"
+};
+
+const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly';
+
+function authenticate() {
+  return gapi.auth2.getAuthInstance()
+    .signIn({scope: SCOPES})
+    .then(() => console.log("Sign-in successful"))
+    .catch(err => console.error("Error signing in", err));
+}
+
+function loadClient() {
+  gapi.client.setApiKey(API_KEY);
+  return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/drive/v3/rest")
+    .then(() => console.log("GAPI client loaded for API"))
+    .catch(err => console.error("Error loading GAPI client", err));
+}
+
+function uploadToDrive() {
+  const fileInput = document.getElementById("fileInput");
+  const file = fileInput.files[0];
+  const selectedSubject = document.getElementById("subjectSelect").value;
+
+  if (!file) return alert("Please select a file first");
+  if (!selectedSubject) return alert("Please select a subject");
+
+  const FOLDER_ID = FOLDER_IDS[selectedSubject];
+
+  authenticate().then(loadClient).then(() => {
+    const fileMetadata = {
+      'name': file.name,
+      'parents': [FOLDER_ID]
+    };
+    const form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(fileMetadata)], {type: 'application/json'}));
+    form.append('file', file);
+
+    fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+      method: 'POST',
+      headers: new Headers({'Authorization': 'Bearer ' + gapi.auth.getToken().access_token}),
+      body: form,
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('uploadStatus').innerText = "✅ File uploaded successfully to " + selectedSubject + "!";
+      console.log('File ID:', data.id);
+    })
+    .catch(err => {
+      console.error('Upload error:', err);
+      document.getElementById('uploadStatus').innerText = "❌ Upload failed!";
+    });
+  });
+}
+
+gapi.load("client:auth2", () => {
+  gapi.auth2.init({client_id: CLIENT_ID});
+});
+</script>
+</body>
+</html>
